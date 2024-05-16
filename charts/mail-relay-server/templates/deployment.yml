@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-postfix
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-postfix
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-postfix
+    spec:
+      containers:
+        - name: postfix
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          volumeMounts:
+          - name: sasl-passwd
+            mountPath: /etc/postfix/sasl_passwd
+            subPath: sasl_passwd
+          ports:
+          - containerPort: {{ .Values.service.postfixPort }}
+          env:
+            - name: SMTPD_SASL_AUTH_ENABLE
+              value: "{{ .Values.env.SMTPD_SASL_AUTH_ENABLE }}"
+            - name: SMTPD_SASL_SECURITY_OPTIONS
+              value: "{{ .Values.env.SMTPD_SASL_SECURITY_OPTIONS }}"
+            - name: SMTPD_RECIPIENT_RESTRICTIONS
+              value: "{{ .Values.env.SMTPD_RECIPIENT_RESTRICTIONS }}"
+            - name: MECH_LIST
+              value: "{{ .Values.env.MECH_LIST }}"
+            - name: PW_CHECK_METHOD
+              value: "{{ .Values.env.PW_CHECK_METHOD }}"
+        - name: {{ .Release.Name }}-postfix-exporter
+          image: "{{ .Values.exporterImage.repository }}:{{ .Values.exporterImage.tag }}"
+          ports:
+          - containerPort: {{ .Values.service.exporterPort }}
+      volumes:
+        - name: sasl-passwd
+          secret:
+            secretName: postfix-sasl-secret

@@ -1,0 +1,22 @@
+replicaCount: 1
+
+postfixImage:
+  repository: my-postfix
+  tag: latest
+  pullPolicy: IfNotPresent
+exporterImage:
+  repository: my-postfix-exporter
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  postfixPort: 587
+  exporterPort: 9154
+
+env:
+  SMTPD_SASL_AUTH_ENABLE: "yes"
+  SMTPD_SASL_SECURITY_OPTIONS: "noanonymous"
+  SMTPD_RECIPIENT_RESTRICTIONS: "permit_sasl_authenticated,reject"
+  MECH_LIST: "plain login"
+  PW_CHECK_METHOD: "saslauthd"

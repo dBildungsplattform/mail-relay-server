@@ -1,0 +1,14 @@
+# Verwende Alpine Linux als Basis
+FROM alpine:3
+
+# Installiere benötigte Werkzeuge
+RUN apk add --no-cache curl ca-certificates && \
+    curl -L https://github.com/sergeymakinen/postfix_exporter/releases/download/v1.2.4/postfix_exporter_1.2.4_linux_amd64.tar.gz | tar -xz -C /usr/local/bin
+
+# Setze den Pfad zum Postfix Log
+ENV POSTFIX_LOG_PATH="/var/log/mail.log"
+
+# Expose Port für den Exporter
+EXPOSE 9154
+
+CMD ["postfix_exporter"]
