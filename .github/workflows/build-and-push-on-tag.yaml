@@ -18,6 +18,11 @@ jobs:
         with:
           tagRegex: "(?<tag>[0-9]+.[0-9]+.[0-9]+)"
   build_and_push_postfix:
+    permissions:
+      packages: write
+      security-events: write
+      actions: read
+      contents: read
     needs: pre_build
     uses: hpi-schul-cloud/infra-tools/.github/workflows/build-and-push.yaml@master
     with:
@@ -27,6 +32,11 @@ jobs:
       tag: ${{ needs.pre_build.outputs.tag }}
       suffix: ${{ needs.pre_build.outputs.suffix }}
   build_and_push_exporter:
+    permissions:
+      packages: write
+      security-events: write
+      actions: read
+      contents: read
     needs: pre_build
     uses: hpi-schul-cloud/infra-tools/.github/workflows/build-and-push.yaml@master
     with:
