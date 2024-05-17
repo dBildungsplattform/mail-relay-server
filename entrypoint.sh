@@ -26,5 +26,5 @@ if [ -f "/etc/postfix/sasl_passwd" ]; then
 fi
 
 # Starte Postfix im Vordergrund
-postfix start
-tail -f /var/log/mail.log
+postfix start-fg
+# tail -f /var/log/mail.log
