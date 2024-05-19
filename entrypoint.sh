@@ -10,6 +10,8 @@ postconf -e "smtpd_recipient_restrictions=${SMTPD_RECIPIENT_RESTRICTIONS}"
 postconf -e "smtp_tls_security_level=${SMTP_TLS_SECURITY_LEVEL}"
 postconf -e "smtp_tls_CAfile=${SMTP_TLS_CAFILE}"
 postconf -e "mynetworks = 127.0.0.0/8,10.0.0.0/8"
+postconf -e "smtp_tls_wrappermode = yes"
+postconf -e "smtp_tls_security_level = encrypt"
 postconf -e "maillog_file = /dev/stdout"
 
 # Erstelle smtpd.conf für Cyrus-SASL
@@ -24,7 +26,7 @@ adduser -D ${SMTP_USER} -s /bin/false && echo "${SMTP_USER}:${SMTP_PASSWORD}" | 
 # Überprüfe, ob die sasl_passwd-Datei vorhanden ist
 if [ -f "/etc/postfix/sasl_passwd" ]; then
     # Erstelle die sasl_passwd.db-Datei
-    postmap hash:/etc/postfix/sasl_passwd
+    postmap lmdb:/etc/postfix/sasl_passwd
     chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
 fi
 
