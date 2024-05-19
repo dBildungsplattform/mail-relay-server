@@ -10,7 +10,7 @@ RUN chmod +x /entrypoint.sh
 ENV RELAY_HOST="[smtp.example.com]:587" \
     SMTP_SASL_AUTH_ENABLE="yes" \
     SMTP_SASL_SECURITY_OPTIONS="noanonymous" \
-    SMTP_SASL_PASSWORD_MAPS="hash:/etc/postfix/sasl_passwd" \
+    SMTP_SASL_PASSWORD_MAPS="lmdb:/etc/postfix/sasl_passwd" \
     SMTPD_RECIPIENT_RESTRICTIONS="permit_sasl_authenticated,reject" \
     SMTP_TLS_SECURITY_LEVEL="may" \
     SMTP_TLS_CAFILE="/etc/ssl/certs/ca-certificates.crt" \
