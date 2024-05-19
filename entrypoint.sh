@@ -9,6 +9,7 @@ postconf -e 'smtpd_sasl_local_domain=$myhostname'
 postconf -e "smtpd_recipient_restrictions=${SMTPD_RECIPIENT_RESTRICTIONS}"
 postconf -e "smtp_tls_security_level=${SMTP_TLS_SECURITY_LEVEL}"
 postconf -e "smtp_tls_CAfile=${SMTP_TLS_CAFILE}"
+postconf -e "mynetwork=10.208.0.0/12"
 postconf -e "maillog_file = /dev/stdout"
 
 # Erstelle smtpd.conf für Cyrus-SASL
