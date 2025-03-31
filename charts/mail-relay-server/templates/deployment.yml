@@ -14,11 +14,13 @@ spec:
     spec:
       containers:
         - name: postfix
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.postfixImage.repository }}:{{ .Values.postfixImage.tag }}"
+         {{- if eq "true" (.Values.sasl_passwd_secret.enabled | toString) }}
           volumeMounts:
-          - name: sasl-passwd
-            mountPath: /etc/postfix/sasl_passwd
-            subPath: sasl_passwd
+            - name: sasl-passwd
+              mountPath: /etc/postfix/sasl_passwd
+              subPath: sasl_passwd
+          {{- end }}
           ports:
           - containerPort: {{ .Values.service.postfixPort }}
           env:
@@ -32,15 +34,21 @@ spec:
               value: "{{ .Values.env.MECH_LIST }}"
             - name: PW_CHECK_METHOD
               value: "{{ .Values.env.PW_CHECK_METHOD }}"
-            - name: SMTP_SASL_PASSWORD_MAPS
-              value: "{{ .Values.env.SMTP_SASL_PASSWORD_MAPS }}"
             - name: RELAY_HOST
               value: "{{ .Values.env.RELAY_HOST }}"
+            {{- if ne "true" (.Values.sasl_passwd_secret.enabled | toString) }}
+            - name: SMTP_SASL_PASSWORD_MAPS
+              value: "{{ .Values.env.SMTP_SASL_PASSWORD_MAPS }}"
+            {{- end }}
+        {{- if eq "true" (.Values.postfix_exporter.enabled | toString) }}
         - name: {{ .Release.Name }}-postfix-exporter
           image: "{{ .Values.exporterImage.repository }}:{{ .Values.exporterImage.tag }}"
           ports:
           - containerPort: {{ .Values.service.exporterPort }}
+        {{- end }}
+      {{- if eq "true" (.Values.sasl_passwd_secret.enabled | toString) }}
       volumes:
         - name: sasl-passwd
           secret:
             secretName: postfix-sasl-secret
+      {{- end }}

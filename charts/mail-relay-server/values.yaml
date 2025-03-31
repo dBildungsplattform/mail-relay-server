@@ -11,6 +11,7 @@ exporterImage:
 
 service:
   type: ClusterIP
+  port: 587
   postfixPort: 587
   exporterPort: 9154
 
@@ -22,3 +23,9 @@ env:
   PW_CHECK_METHOD: "saslauthd"
   RELAY_HOST: ""
   SMTP_SASL_PASSWORD_MAPS: ""
+
+sasl_passwd_secret:
+  enabled: false
+
+postfix_exporter:
+  enabled: false
