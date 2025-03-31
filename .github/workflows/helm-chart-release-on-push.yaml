@@ -1,0 +1,18 @@
+name: Release mail-relay-server Chart
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+concurrency:
+  group: mail-relay-server-chart
+  cancel-in-progress: true
+
+jobs:
+  release_helm:
+    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/chart-release.yaml@7
+    secrets: inherit
+    with:
+      chart_name: mail-relay-server
+      helm_chart_version_generation: ticket_from_branch_timestamp
+      image_tag_generation: ticket_from_branch
