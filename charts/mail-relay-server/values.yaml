@@ -15,8 +15,10 @@ service:
   exporterPort: 9154
 
 env:
-  SMTPD_SASL_AUTH_ENABLE: "yes"
+  SMTPD_SASL_AUTH_ENABLE: "no"
   SMTPD_SASL_SECURITY_OPTIONS: "noanonymous"
   SMTPD_RECIPIENT_RESTRICTIONS: "permit_sasl_authenticated,reject"
   MECH_LIST: "plain login"
   PW_CHECK_METHOD: "saslauthd"
+  RELAY_HOST: ""
+  SMTP_SASL_PASSWORD_MAPS: ""

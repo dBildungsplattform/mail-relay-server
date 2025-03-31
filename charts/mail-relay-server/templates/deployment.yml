@@ -32,6 +32,10 @@ spec:
               value: "{{ .Values.env.MECH_LIST }}"
             - name: PW_CHECK_METHOD
               value: "{{ .Values.env.PW_CHECK_METHOD }}"
+            - name: SMTP_SASL_PASSWORD_MAPS
+              value: "{{ .Values.env.SMTP_SASL_PASSWORD_MAPS }}"
+            - name: RELAY_HOST
+              value: "{{ .Values.env.RELAY_HOST }}"
         - name: {{ .Release.Name }}-postfix-exporter
           image: "{{ .Values.exporterImage.repository }}:{{ .Values.exporterImage.tag }}"
           ports:
